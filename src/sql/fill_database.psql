@@ -1,0 +1,5 @@
+\i fill_experiences.sql
+\i fill_projects.sql
+\i fill_technologies.sql
+\i map_project_technologies.sql
+\i map_experience_technologies.sql
