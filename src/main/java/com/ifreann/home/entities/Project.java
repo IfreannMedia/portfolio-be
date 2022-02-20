@@ -1,36 +1,58 @@
 package com.ifreann.home.entities;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Projects")
-//@NamedQueries({
-//        @NamedQuery(name = "Project.selectAll", query = "select * from Projects")
-//})
+@TypeDefs({
+        @TypeDef(
+                name = "string-array",
+                typeClass = StringArrayType.class
+        )
+})
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(columnDefinition = "text")
     private String description;
-    private Integer technologiesUsed;
-    private Integer projectType;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "projects_technologies",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "technology_Id")}
+    )
+    private List<Technology> technologiesUsed;
+    private String projectType;
     private String imageUrl;
-    private String githubUrl;
+    @Type(type = "string-array")
+    @Column(
+            name = "github_urls",
+            columnDefinition = "text[]"
+    )
+    private String[] githubUrls;
     private String accessUrl;
 
     public Project() {
     }
 
-    public Project(Integer id,String name, String description, Integer technologiesUsed, Integer projectType, String imageUrl, String githubUrl, String accessUrl) {
+    public Project(Integer id, String name, String description, List<Technology> technologiesUsed, String projectType, String imageUrl, String[] githubUrls, String accessUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.technologiesUsed = technologiesUsed;
         this.projectType = projectType;
         this.imageUrl = imageUrl;
-        this.githubUrl = githubUrl;
+        this.githubUrls = githubUrls;
         this.accessUrl = accessUrl;
     }
 
@@ -58,19 +80,19 @@ public class Project {
         this.description = description;
     }
 
-    public Integer getTechnologiesUsed() {
+    public List<Technology> getTechnologiesUsed() {
         return technologiesUsed;
     }
 
-    public void setTechnologiesUsed(Integer technologiesUsed) {
+    public void setTechnologiesUsed(List<Technology> technologiesUsed) {
         this.technologiesUsed = technologiesUsed;
     }
 
-    public Integer getProjectType() {
+    public String getProjectType() {
         return projectType;
     }
 
-    public void setProjectType(Integer projectType) {
+    public void setProjectType(String projectType) {
         this.projectType = projectType;
     }
 
@@ -82,12 +104,12 @@ public class Project {
         this.imageUrl = imageUrl;
     }
 
-    public String getGithubUrl() {
-        return githubUrl;
+    public String[] getGithubUrls() {
+        return githubUrls;
     }
 
-    public void setGithubUrl(String githubUrl) {
-        this.githubUrl = githubUrl;
+    public void setGithubUrls(String[] githubUrls) {
+        this.githubUrls = githubUrls;
     }
 
     public String getAccessUrl() {

@@ -9,7 +9,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.sql.SQLException;
 import java.util.Collection;
 
 @Path("/projects")
@@ -23,7 +22,7 @@ public class ProjectsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Project> getProjects() throws SQLException {
+    public Collection<Project> getProjects() {
         return this.projectsService.getProjects();
     }
 }
